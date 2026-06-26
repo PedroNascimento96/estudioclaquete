@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0a0a">
+<title>Estúdio Claquete · Meta Ads · Junho 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────────── */
+:root {
+  --orange:        #FF6B1A;
+  --orange-dim:    rgba(255,107,26,0.10);
+  --orange-border: rgba(255,107,26,0.28);
+  --black:         #080808;
+  --surface:       #101010;
+  --surface-2:     #161616;
+  --border:        rgba(255,255,255,0.07);
+  --text:          #efefef;
+  --muted:         #888;
+  --dim:           #4a4a4a;
+  --green:         #22c55e;
+  --yellow:        #eab308;
+  --radius:        14px;
+  --radius-sm:     10px;
+}
+
+/* ─────────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* subtle noise overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* ─────────────────────────────────────────────
+   LAYOUT
+───────────────────────────────────────────── */
+.page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 48px 24px 72px;
+}
+
+/* ─────────────────────────────────────────────
+   HEADER
+───────────────────────────────────────────── */
+.header {
+  margin-bottom: 36px;
+  opacity: 0;
+  animation: up 0.55s ease forwards;
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.agency {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.agency .pulse {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+  flex-shrink: 0;
+  animation: blink 2.2s ease infinite;
+}
+
+.badge {
+  font-family: 'Outfit', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--orange);
+  border: 1px solid var(--orange-border);
+  background: var(--orange-dim);
+  padding: 4px 11px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.header-title {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.client-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(34px, 8.5vw, 54px);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: #fff;
+}
+
+.client-name em {
+  font-style: normal;
+  color: var(--orange);
+}
+
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  padding-bottom: 4px;
+}
+
+.period {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.platform-label {
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.06em;
+}
+
+.header-rule {
+  height: 1px;
+  margin-top: 28px;
+  background: linear-gradient(90deg, var(--orange) 0%, rgba(255,107,26,0.06) 55%, transparent 100%);
+}
+
+/* ─────────────────────────────────────────────
+   TOTALS STRIP
+───────────────────────────────────────────── */
+.totals {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 40px;
+  position: relative;
+  opacity: 0;
+  animation: up 0.55s ease 0.08s forwards;
+}
+
+/* top accent line */
+.totals::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--orange) 0%, transparent 70%);
+  z-index: 1;
+}
+
+.total-cell {
+  padding: 22px 20px 18px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.total-cell:last-child { border-right: none; }
+
+.tc-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.tc-value {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(17px, 3.2vw, 22px);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.tc-value.orange { color: var(--orange); }
+
+.tc-sub {
+  font-size: 9px;
+  color: var(--dim);
+  line-height: 1.3;
+}
+
+/* ─────────────────────────────────────────────
+   SECTION HEADING
+───────────────────────────────────────────── */
+.sec-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sec-heading-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.sec-heading-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ─────────────────────────────────────────────
+   CAMPAIGN CARD
+───────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 12px;
+  transition: border-color 0.2s ease;
+  opacity: 0;
+  animation: up 0.55s ease forwards;
+}
+
+.card:nth-of-type(1) { animation-delay: 0.16s; }
+.card:nth-of-type(2) { animation-delay: 0.24s; }
+
+.card:hover { border-color: var(--orange-border); }
+
+/* ── card top bar ── */
+.card-top {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: 18px 20px 16px;
+  gap: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-info { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+
+.card-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.01em;
+  word-break: break-word;
+}
+
+.card-tags {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.tag.ativo {
+  color: var(--green);
+  background: rgba(34,197,94,0.08);
+  border: 1px solid rgba(34,197,94,0.18);
+}
+
+.tag.inativo {
+  color: var(--muted);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+}
+
+.tag .dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.tag.ativo .dot { animation: blink 2s ease infinite; }
+
+.tag-type {
+  font-size: 10px;
+  color: var(--dim);
+  font-weight: 500;
+}
+
+/* spend block */
+.card-spend {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 3px;
+}
+
+.spend-lbl {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.spend-val {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  color: var(--orange);
+  line-height: 1;
+  font-size: clamp(18px, 4.5vw, 24px);
+  white-space: nowrap;
+}
+
+/* ── metrics grid 2×2 ── */
+.card-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.m-cell {
+  padding: 16px 20px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* remove right border on even cells, remove bottom on last row */
+.m-cell:nth-child(even) { border-right: none; }
+
+.card-metrics.last-row .m-cell { border-bottom: none; }
+
+.m-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.m-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(19px, 4vw, 24px);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.m-val.orange { color: var(--orange); }
+
+.m-sub {
+  font-size: 9px;
+  color: var(--dim);
+  line-height: 1.35;
+}
+
+/* freq pill */
+.freq-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+}
+
+.freq-pip {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.pip-green  { background: var(--green); }
+.pip-yellow { background: var(--yellow); }
+
+.freq-txt { font-size: 9px; color: var(--dim); }
+
+/* ── share bar ── */
+.card-bar {
+  padding: 13px 20px;
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bar-lbl {
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: 0.06em;
+}
+
+.bar-pct {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--orange);
+  white-space: nowrap;
+}
+
+.bar-track {
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--orange), #ff9a55);
+  width: 0;
+  transition: width 1.1s cubic-bezier(0.16,1,0.3,1) 0.35s;
+}
+
+/* ─────────────────────────────────────────────
+   COMPARISON TABLE
+───────────────────────────────────────────── */
+.compare-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  opacity: 0;
+  animation: up 0.55s ease 0.32s forwards;
+}
+
+.compare-head {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.compare-head-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.compare-head-tag {
+  font-family: 'Outfit', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--orange);
+  letter-spacing: 0.08em;
+}
+
+.tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+.tbl {
+  width: 100%;
+  min-width: 300px;
+  border-collapse: collapse;
+}
+
+.tbl thead th {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  padding: 11px 20px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  white-space: nowrap;
+}
+
+.tbl thead th:not(:first-child) { text-align: right; }
+
+.tbl tbody td {
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.tbl tbody tr:last-child td { border-bottom: none; }
+
+.tbl tbody td:not(:first-child) {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+}
+
+.tbl .hi { color: var(--orange) !important; }
+
+/* ─────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────── */
+.footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: up 0.55s ease 0.44s forwards;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.footer-brand .pulse {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+  flex-shrink: 0;
+  animation: blink 2.2s ease infinite;
+}
+
+.footer-info {
+  font-size: 9px;
+  color: var(--dim);
+  text-align: right;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+}
+
+/* ─────────────────────────────────────────────
+   ANIMATIONS
+───────────────────────────────────────────── */
+@keyframes up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE — TABLET (≤ 600px)
+───────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .page { padding: 32px 16px 60px; }
+
+  /* totals: 2×2 */
+  .totals {
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 32px;
+  }
+
+  .total-cell {
+    padding: 18px 16px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* remove bottom border from last row (cells 3 & 4) */
+  .total-cell:nth-child(3),
+  .total-cell:nth-child(4) { border-bottom: none; }
+
+  /* keep right border only on odd cells */
+  .total-cell:nth-child(even) { border-right: none; }
+  .total-cell:nth-child(odd)  { border-right: 1px solid var(--border); }
+
+  /* card top: stack spend below info */
+  .card-top {
+    flex-direction: column;
+    padding: 16px 16px 14px;
+    gap: 14px;
+  }
+
+  .card-spend {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .spend-lbl { margin: 0; }
+
+  .m-cell { padding: 13px 16px; }
+
+  .m-val { font-size: 20px; }
+
+  .card-bar { padding: 12px 16px; }
+
+  .compare-head { padding: 12px 16px; }
+  .tbl thead th,
+  .tbl tbody td { padding: 11px 16px; }
+
+  .header-rule { margin-top: 22px; }
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE — SMALL (≤ 380px)
+───────────────────────────────────────────── */
+@media (max-width: 380px) {
+  .page { padding: 28px 14px 56px; }
+
+  .header-title { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .header-right { align-items: flex-start; }
+
+  .m-val { font-size: 18px; }
+
+  .tbl tbody td:not(:first-child) { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══ HEADER ══ -->
+  <header class="header">
+    <div class="header-meta">
+      <div class="agency">
+        <span class="pulse"></span>
+        Fluxe Assessoria
+      </div>
+      <div class="badge">Meta Ads</div>
+    </div>
+
+    <div class="header-title">
+      <div class="client-name">Estúdio<br><em>Claquete</em></div>
+      <div class="header-right">
+        <div class="period">Junho · 2026</div>
+        <div class="platform-label">01 jun – 25 jun</div>
+      </div>
+    </div>
+
+    <div class="header-rule"></div>
+  </header>
+
+  <!-- ══ TOTALS STRIP ══ -->
+  <div class="totals">
+    <div class="total-cell">
+      <div class="tc-label">Alcance</div>
+      <div class="tc-value">7.124</div>
+      <div class="tc-sub">Contas atingidas</div>
+    </div>
+    <div class="total-cell">
+      <div class="tc-label">Impressões</div>
+      <div class="tc-value">18.393</div>
+      <div class="tc-sub">Exibições totais</div>
+    </div>
+    <div class="total-cell">
+      <div class="tc-label">Leads</div>
+      <div class="tc-value">40</div>
+      <div class="tc-sub">Formulários gerados</div>
+    </div>
+    <div class="total-cell">
+      <div class="tc-label">Investimento</div>
+      <div class="tc-value orange">R$&nbsp;735,76</div>
+      <div class="tc-sub">Total do período</div>
+    </div>
+  </div>
+
+  <!-- ══ CAMPANHAS ══ -->
+  <div class="sec-heading">
+    <span class="sec-heading-text">Campanhas</span>
+    <span class="sec-heading-line"></span>
+  </div>
+
+  <!-- CARD 01 ─ FORMS 02 -->
+  <div class="card">
+    <div class="card-top">
+      <div class="card-info">
+        <div class="card-name">[CP] [ADS] [FORMS] [02]</div>
+        <div class="card-tags">
+          <span class="tag ativo"><span class="dot"></span>Ativo</span>
+          <span class="tag-type">Lead Gen · Campanha</span>
+        </div>
+      </div>
+      <div class="card-spend">
+        <div class="spend-lbl">Investido</div>
+        <div class="spend-val">R$&nbsp;694,18</div>
+      </div>
+    </div>
+
+    <div class="card-metrics">
+      <div class="m-cell">
+        <div class="m-lbl">Alcance</div>
+        <div class="m-val">7.012</div>
+        <div class="m-sub">Contas atingidas</div>
+      </div>
+      <div class="m-cell">
+        <div class="m-lbl">Impressões</div>
+        <div class="m-val">17.253</div>
+        <div class="m-sub">Exibições</div>
+      </div>
+      <div class="m-cell">
+        <div class="m-lbl">Frequência</div>
+        <div class="m-val">2,46</div>
+        <div class="freq-row">
+          <span class="freq-pip pip-yellow"></span>
+          <span class="freq-txt">Saturação moderada</span>
+        </div>
+      </div>
+      <div class="m-cell">
+        <div class="m-lbl">Leads</div>
+        <div class="m-val orange">39</div>
+        <div class="m-sub">Formulários</div>
+      </div>
+    </div>
+
+    <div class="card-metrics last-row">
+      <div class="m-cell">
+        <div class="m-lbl">Custo por Lead</div>
+        <div class="m-val orange">R$&nbsp;17,80</div>
+        <div class="m-sub">Por formulário</div>
+      </div>
+      <div class="m-cell">
+        <div class="m-lbl">Frequência média</div>
+        <div class="m-val" style="font-size:15px; color:var(--muted); font-weight:600;">2,46×</div>
+        <div class="m-sub">Impressões / Alcance</div>
+      </div>
+    </div>
+
+    <div class="card-bar">
+      <div class="bar-row">
+        <span class="bar-lbl">Participação no investimento</span>
+        <span class="bar-pct">94,4%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" data-w="94.4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 02 ─ FORMS 03 -->
+  <div class="card">
+    <div class="card-top">
+      <div class="card-info">
+        <div class="card-name">[CP] [ADS] [FORMS] [03]</div>
+        <div class="card-tags">
+          <span class="tag inativo"><span class="dot"></span>Inativo</span>
+          <span class="tag-type">Lead Gen · Campanha</span>
+        </div>
+      </div>
+      <div class="card-spend">
+        <div class="spend-lbl">Investido</div>
+        <div class="spend-val">R$&nbsp;41,52</div>
+      </div>
+    </div>
+
+    <div class="card-metrics">
+      <div class="m-cell">
+        <div class="m-lbl">Alcance</div>
+        <div class="m-val">754</div>
+        <div class="m-sub">Contas atingidas</div>
+      </div>
+      <div class="m-cell">
+        <div class="m-lbl">Impressões</div>
+        <div class="m-val">1.139</div>
+        <div class="m-sub">Exibições</div>
+      </div>
+      <div class="m-cell">
+        <div class="m-lbl">Frequência</div>
+        <div class="m-val">1,51</div>
+        <div class="freq-row">
+          <span class="freq-pip pip-green"></span>
+          <span class="freq-txt">Saudável</span>
+        </div>
+      </div>
+      <div class="m-cell">
+        <div class="m-lbl">Leads</div>
+        <div class="m-val orange">1</div>
+        <div class="m-sub">Formulário</div>
+      </div>
+    </div>
+
+    <div class="card-metrics last-row">
+      <div class="m-cell">
+        <div class="m-lbl">Custo por Lead</div>
+        <div class="m-val orange">R$&nbsp;41,52</div>
+        <div class="m-sub">Por formulário</div>
+      </div>
+      <div class="m-cell">
+        <div class="m-lbl">Frequência média</div>
+        <div class="m-val" style="font-size:15px; color:var(--muted); font-weight:600;">1,51×</div>
+        <div class="m-sub">Impressões / Alcance</div>
+      </div>
+    </div>
+
+    <div class="card-bar">
+      <div class="bar-row">
+        <span class="bar-lbl">Participação no investimento</span>
+        <span class="bar-pct">5,6%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" data-w="5.6"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ COMPARATIVO ══ -->
+  <div class="sec-heading" style="margin-top:32px;">
+    <span class="sec-heading-text">Comparativo</span>
+    <span class="sec-heading-line"></span>
+  </div>
+
+  <div class="compare-card">
+    <div class="compare-head">
+      <span class="compare-head-title">Campanhas · lado a lado</span>
+      <span class="compare-head-tag">Junho 2026</span>
+    </div>
+    <div class="tbl-scroll">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Métrica</th>
+            <th>FORMS 02</th>
+            <th>FORMS 03</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Alcance</td>
+            <td class="hi">7.012</td>
+            <td>754</td>
+          </tr>
+          <tr>
+            <td>Impressões</td>
+            <td class="hi">17.253</td>
+            <td>1.139</td>
+          </tr>
+          <tr>
+            <td>Frequência</td>
+            <td>2,46</td>
+            <td class="hi">1,51</td>
+          </tr>
+          <tr>
+            <td>Leads</td>
+            <td class="hi">39</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>Investimento</td>
+            <td class="hi">R$&nbsp;694,18</td>
+            <td>R$&nbsp;41,52</td>
+          </tr>
+          <tr>
+            <td>Custo / Lead</td>
+            <td class="hi">R$&nbsp;17,80</td>
+            <td>R$&nbsp;41,52</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <div class="footer-brand">
+      <span class="pulse"></span>
+      Fluxe Assessoria
+    </div>
+    <div class="footer-info">
+      Meta Ads · Estúdio Claquete<br>
+      Junho 2026
+    </div>
+  </footer>
+
+</div>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        document.querySelectorAll('.bar-fill').forEach(el => {
+          el.style.width = el.dataset.w + '%';
+        });
+      }, 250);
+    });
+  });
+</script>
+</body>
+</html>
